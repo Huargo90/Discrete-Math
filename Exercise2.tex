@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+\usepackage{mathrsfs}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{amsthm}
+\usepackage{tkz-berge}
+\usepackage{pgf}
+\usepackage{xcolor}
+\usepackage{algorithm}
+\usepackage{caption}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage[noend]{algpseudocode}
+\newcommand{\Term}{Winter 2019}
+\newcommand{\Course}{104.272 Discrete Mathematics, Group 1}
+
+\newcommand{\Assignment}{2. Exercise}
+\newcommand{\DueDate}{ 23 October, 2019 }
+
+\usepackage[body={6in,9in}]{geometry}
+
+
+
+\begin{document}
+Hugo \textit{Rincon Galeana}
+\begin{center}
+
+\textbf{TU Wien, \Term} \\
+\textbf{\Course} (Professor Pfannerer) \\
+\textbf{\Assignment, Due \DueDate}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% *****      Type your answers after the "\soln" commands      ***** %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{enumerate}
+    \setcounter{enumi}{10}
+    \item A graph $H = (V',E')$ is an induced subgraph of $G=(V,E)$, if $V' \subseteq V$ and any edge in $G$ connecting two vertices $a,b \in V'$ is in $E'$. Let $G$ be a connected simple graph that does not have a path or cycle with four vertices as an induced subgraph.
+    
+    Show that $G$ has a vertex adjacent to all other vertices.
+    
+    \begin{proof}
+        First let us notice that since $G$ is connected, then the maximum distance between any two vertices $v$ and $w$ is $2$. Assume by contradiction that there exist vertices $v,w$ such that $P=(v=v_0,v_1,v_2,v_3=w)$ is a minimal length path of length $2$.
+        Consider the subgraph induced by the vertices of $P$ =$G_P$. Since $P$ is neither a cycle nor a path, then either edge $(v_1,v3) \in E(G_P)$ or $(v_2,v_0) \in E(G_P)$, in any of these cases, a shorter path is found from $v=v_0$ to $w=v_3$.
+        
+        Now let $v$ be a vertex of maximum degree. Let us assume for the sake of a contradiction that $v$ is not adjacent to some vertex $w$. Since $G$ is connected, there exists a path $P$ from $v$ to $w$. Since $d(v,w) \neq 1$, then from the previous observation, it follows that $d(v,w) = 2$. Therefore $P= (v_0 = v, v_1, v_2 = w)$. 
+        
+        We will now show that $\delta(v_1) > \delta (v)$. Let $v'$ be a vertex that is adjacent to $v$, such that $v' \neq v_1$. Notice that since $v'$ is adjacent to $v$, then $v' \neq v_2$. Therefore $P=(v',v_0 = v, v_1, v_2)$ is a path in $G$. Let us consider $G_P$ the graph induced by the vertices from $P$. Since $G_P$ is not a cycle nor a path, then either $(v=v_0,v2) \in E$ or $(v',v_1) \in E$. Since $v_2$ is not adjacent to $v_0=v$ then $v'$ should be adjacent to $v_1$. This shows that any neighbor of $v$ that is not $v_1$ is also a neighbor of $v_1$.
+        
+        Since $v_1$ is adjacent to $v$ and it is also adjacent to $v_2$ and to any neighbor of $v$, it follows that $\delta(v_1) \geq \delta(v)+1$. Therefore $\delta(v_1)> \delta(v)$. This contradicts that $v$ is a vertex of maximum degree.
+    \end{proof}
+    
+    \item Let $G$ be a connected graph with an even number of vertices. Show that $G$ has a spanning (but not necessarily connected) subgraph with all vertices of odd degree. Show that this is not the case for arbitrary graphs.
+    
+    \begin{proof}
+        Let $G'$ be a spanning subgraph that has the minimum amount of vertices of even degree.
+        
+        Let $Ev$ be the set of vertices with even degree in $G'$; and $Od$ the set of vertices with odd degree in $G'$.  Assume by contradiction that $Ev \neq \varnothing$. Notice that $Ev$ is an independent set in $G$, since adding or removing an edge in $Ev$ from $G'$ would yield a smaller even degree vertex set.
+        
+        Let $v$ be a vertex in $Ev$. Since $\vert V \vert $ is even, and $\vert Od \vert$ is also even, then $\vert Ev \vert$ should be even. Therefore, there exists a vertex $v' \in Ev$ different to $v$. Since $G$ is connected, then there exists a path $P = (v_0 =v, v_1, \ldots,v_{k-1}, v_k = v')$ in $G$. Notice that since $Ev$ is independent, then $v_1 \in Od$. Notice also that since $v_1 \in Od$ and $v_k \in Ev$, then there exists a minimum $i$ such that $i \geq 1$, $v_i \in Od$ and $v_{i+1} \in Ev$. Consider now the path $P' = (v_0 = v, v_1, \ldots, v_i, v_{i+1})$. Notice that all the internal vertices of $P'$ belong to $Od$, while the ends $v_0$ and $v_{i+1} \in Ev$.
+        
+        Let $I$ be the set of edges from $P'$ that belong in $G'$, and $O$ the set of edges from $P'$ that are not in $G'$. 
+        
+        Consider the following graph $G^* = (G'\setminus I) \cup O$. Notice that since we either added or removed each of the edges in $P'$, then the internal vertices of $P'$ which had an odd degree, still have an odd degree, but $v$ and $v_{i+1}$ now have an odd degree at $G^*$.
+        
+        This contradicts that $G'$ has a minimum of vertices of even degree.
+        Therefore $Ev = \varnothing$. Notice then that $G'$ is a spanning graph with all vertices of odd degree.
+    \end{proof}
+    
+    \item Let $T$ be a tree and let $n_d$ be the number of vertices of degree $d$ in $T$. Show that the number of leaves of $T$ equals $$ 2+ \displaystyle \sum \limits_{d\geq 3} (d-2) n_d$$
+    
+    \begin{proof}
+     Since $T$ is a tree, then $\vert E \vert = \vert V \vert -1$. Let $\vert V \vert = n$ Notice that the handshaking lemma provides the following equation 
+     \begin{equation}
+         2 \cdot (n -1) = n_1+2\cdot n_2+\displaystyle \sum \limits_{d\geq 3} (d \cdot n_d)
+     \end{equation}
+     
+     Notice also that $n = \displaystyle \sum \limits_{d=1}^{n} n_d$.
+     
+     Therefore the following equation holds:
+     \begin{equation}
+         2 \cdot n_1 + 2 \cdot n_2 + 2 \cdot \displaystyle \sum \limits_{d \geq 3} n_d - 2 = n_1 + 2 \cdot n_2 + \displaystyle \sum \limits_{d\geq 3} (d \cdot n_d)
+     \end{equation}
+     
+     Notice that equation through cancellation and joining of the sums $(3)$ reduces to:
+     \begin{equation}
+         n_1 = 2 + \displaystyle \sum \limits_{d\geq 3}(d \cdot n_d - 2 \cdot n_d)
+     \end{equation}
+     
+     which yields
+     
+     \begin{equation}
+         n_1 = 2 + \displaystyle \sum \limits_{d \geq 3}(d-2) \cdot n_d
+     \end{equation}
+     
+     This completes the proof
+    \end{proof}
+    
+    \item Show that the number of spanning trees of the complete graph on $n$ vertices $K_n$ is $n^ {n-2}$, using the matrix tree theorem. 
+    
+    \textit{Hint: to compute the determinant of the resulting matrix, add all rows except the first one to the first row. Then add the first row of this new matrix to the other rows.}
+    
+    \begin{proof}
+    Consider the laplacian matrix $M$ given by $(n-1)\cdot I_n - Adj(K_n)$. From the matrix tree theorem, we get that $det(M)$ yields the number of spanning trees of the complete graph.
+    
+    Notice that $M_{i.j}= \begin{cases} \textrm{ $n-1$; if $i=j$}\\ \textrm{ $-1$; otherwise} \end{cases}$
+    
+    \begin{equation}
+        \begin{bmatrix}
+        n-1 & -1  & -1 & \ldots & -1 & -1\\
+        -1  & n-1 & -1 & \ldots & -1 & -1 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots & \vdots  \\
+        -1 & -1 &  -1 & \ldots & n-1 & -1 \\
+        -1 & -1 & -1 & \ldots & -1 & n-1
+        
+        \end{bmatrix}
+    \end{equation}
+    
+    For each row $r_i$, $i \in \{1, \ldots, n-1\}$ we subtract row $r_{i+1}$ from row $r_i$.
+    
+    Notice that since the determinant is a multilinear function, then this operations do not change the eigenvalues from the Laplacian matrix, therefore, the tree matrix theorem still applies to the transformed laplacian matrix given by
+    
+        \begin{equation}
+        \begin{bmatrix}
+        n & -n  & 0 & \ldots & 0 & 0\\
+        0  & n & -n & \ldots & 0 & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots & \vdots  \\
+        0 & 0 &  0 & \ldots & n & -n \\
+        -1 & -1 & -1 & \ldots & -1 & n-1
+        \end{bmatrix}
+    \end{equation}
+    
+    We can now eliminate the last column and the last row of matrix $(6)$ in order to apply the matrix tree theorem.
+    
+    This results in the following matrix
+    
+    \begin{equation}
+        \begin{bmatrix}
+        n & -n  & 0 & \ldots & 0 \\
+        0  & n & -n & \ldots & 0 \\
+        \vdots & \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 &  0 & \ldots & n 
+        \end{bmatrix}
+    \end{equation}
+    
+    \end{proof} 
+
+    Notice that this matrix is an upper triangular matrix, therefore its determinant is given by $n^{n-1}$.
+    
+    Therefore, by applying the matrix tree theorem, we get that there exist $n^{n-2}$ different spanning trees for the complete graph $K_n$
+    
+    \item Let $G$ be a connected graph with $n$ vertices. Let $G_T$ be the graph having the spanning trees of $G$ as vertices, with two vertices $s$ and $t$ being adjacent if and only if the corresponding spanning trees in $G$ share precisely $n-2$ edges.
+    
+    Show that $G$ is connected.
+    
+    \begin{proof}
+    Lets assume by contradiction that $G$ is not connected, therefore there exist $T_1$ and $T_2$ which are spanning trees of $G$ that are not connected. Let $T'$ be a tree that is reachable from $T_1$ and maximal with respect of the amount of edges that it shares with $T_2$. Since $T_1$ and $T_2$ are not connected, then there exists an edge $e \in T_2$ that is not in $T'$. Since $T'$ is a tree, then $T' \cup \{e\}$ includes a cycle $C$. Since $T_2$ is a tree, and therefore it does not contain a cycle, then there exists an edge $e'$ of $C$ that does not belong to $T_2$. Notice that $T^* = T' \cup \{e\} \setminus \{e'\}$ is connected (since we removed an edge from a cycle) and it has $n-1$ edges. Therefore $T^*$ is a spanning tree, however it contains more edges from $T_2$ than $T'$, and is adjacent to $T'$. Since it is adjacent to $T'$, then it is also reachable from $T_1$, this contradicts the maximality of $T'$ with respect to edges from $T_2$. Therefore $G$ is connected.
+    \end{proof}
+    
+    \item Show that all bases of a matroid $M=(E,S)$ have the same cardinality.
+    \begin{proof}
+    Assume by contradiction that there exist basis $\beta_1$ and $\beta_2$ such that $\vert \beta_1 \vert < \vert \beta_2 \vert$. It follows from the matroid property that there exists a vertex $v \in \beta_2$ that does not belong to $\beta_1$ such that $\beta_1 \cup \{ v \} \in S$. Since $\beta_1$ is a basis it is a maximal (with respect to the inclusion) independent set, this contradicts that $\beta_1 \cup \{ v \} \in S$. Therefore all bases have the same cardinality.
+    
+    \end{proof}
+    
+    \item Let $G = (V,E)$ be an undirected graph. Set $M_k(G) = (E,S)$ where 
+    $$ S = \{ A \subseteq E \; : \; A=F \cup M, F \textrm{ acyclic and }\vert M \vert \leq k\}$$
+    
+        Show that $M_k(G)$ is a matroid.
+    \begin{proof}
+    Let $A \in S$, and $A' \subseteq A$. Since $A' \subseteq F \cup M$, then $A' \cap (F \cup M) = A'$. Therefore $A' = (A' \cap F) \cup (A'\cap M)$. Notice that since $F$ is acyclic, then $A' \cap F$ is also acyclic, and since $\vert M \vert \leq k$ then $\vert A' \cap M \vert \leq k$. It follows from the definition of $S$ that $A' \in S$. Therefore $S$ has the independent set property, it only remains to show that $S$ has the matroid property.
+    
+    Assume by contradiction that the matroid property does not hold, then there exist $A, A' \in S$ such that $\vert A \vert < \vert A' \vert$ and for any $e \in A' \setminus A$, $A \cup e \notin S$.
+    
+    Notice that if $A = F \cup M$ as in the definition of $S$, then $\vert M \vert = k$ (otherwise define $M^*= M \cup \{e\})$ and any edge from $M$ forms a cycle in $F$. In particular if $A' = F' \cup M'$, then any edge from $F'$ forms a cycle in $F$.
+    
+    Notice that since any edge $e$ from $F'$ induces a cycle in $F$ (otherwise just add $e$ to $F$), then for any two vertices $u,v$ that are adjacent in $F'$ there exists a path $P_{u,v}$ from $u$ to $v$ in $F$ that does not include $e$. Notice then that if there exists a path $P =(v_0 =u, v_1, \ldots, v_r = v)$ in $F'$, then there also exists a walk that connects $u$ to $v$ in $F$, we obtain such a walk by just joining all paths $P_{v_i,v_{i+1}}$. By removing all vertex repetition in said path, we find a path from $u$ to $v$ in $F'$. This implies that if a set of vertices $N$ spans a connected graph in $F'$, then $N$ also spans a connected graph in $F$. This implies that $F$ has at most the same amount of connected components as $F'$. Since both $F$ and $F'$ are acyclic and $F$ has less or equal connected components as $F'$, then the number of edges in $F$ is greater or equal to the number of edges in $F'$. Since we also know that $\vert M \vert = k \geq \vert M' \vert$, then $\vert A \vert \geq \vert A' \vert$. This contradiction shows that $S$ has the matroid property, therefore completing the proof that $M_k(G)$ is a matroid.
+    \end{proof}
+    \item Let $E_1$ and $E_2$ be two disjoint sets. Moreover, assume that $(E_1,S_1)$ and $(E_2,S_2)$ are matroids. Define $S:= \{ X \cup Y \; \vert \; X \in S_1 \textrm{ and } Y \in S_2 \} $. Prove that $(E_1 \cup E_2, S)$ is a matroid.
+    
+    \begin{proof}
+    First we show that it has the inclusion property. Let $A \in S$ and $A' \subseteq A$. Since $A \in S$, then $A = X \cup Y$ that satisfy the defining conditions of $S$. Since $A' \subseteq A$, it follows that $A' = A' \cap (X \cup Y) = (A' \cap X) \cup  (A' \cap Y)$. Since $X \in S_1$ and $Y \in S_2$ which have the inclusion property, then $X' = (A' \cap X) \in S_1$ and $Y' =  A' \cap Y \in S_2$. This implies, from the definition of $S$ that $A' \in S$.
+    
+    Now we need to show that $S$ has the matroid property. Let $A, A' \in S$ such that $\vert A \vert < \vert A' \vert$. From the definition, it follows that $A = X \cup Y$ and $A' = X' \cup Y'$ that satisfy the building conditions from $S$. Notice that since $X \cup Y = \varnothing$ and $X' \cap Y' = \varnothing$, then either $\vert X \vert < \vert X' \vert$ or $\vert Y \vert < \vert Y' \vert$. Assume without loss of generality that $\vert X \vert < \vert X' \vert$. In this case, since $S_1$ has the matroid property, then there exists $v \in X' \setminus X$ such that $X \cup \{v\} \in S_1$. Therefore $A \cup \{v\} \in S$, since $A \cup \{v\} = (X \cup \{v\} ) \cup Y$. The case where $\vert Y \vert < \vert Y' \vert$ is symmetrical. This shows that $S$ has the matroid property, therefore completing the proof that $(E_1 \cup E_2, S)$ is a matroid.
+    
+    \end{proof}
+    
+    \item Let $J$ be the set of jobs $\{0,1,2,3,4\}$ and $W$ be the set of workers $\{ 04, 0, 123, 12 \}$. Suppose that a job can be done if its number appears in the 'name' of the worker.
+    List all maximal sets of jobs that can be done simultaneously, i.e, the bases of the matroid considered in the lecture. Then use the greedy algorithm to find an optimal job assignment, where the priority of the job is given by its number.
+    Notice that since all workers may be employed simultaneously, then we only need to consider job assignments that use all workers. This observation forces to pick worker $0$ for job $0$, which in turn forces us to pick worker $04$ for work $4$. Therefore we may only choose work configurations for workers $123$ and $12$. This yields the following maximal sets of jobs that can be done simultaneously $\{0,1,2,4\}$ $\{0,1,3,4\}$ $\{0,2,3,4\}$.
+    
+    For the greedy algorithm, we start with $S = \varnothing$. Now, we consider the job with the highest priority, namely task $0$. At this point we verify that $S \cup \{0 \} \subseteq \alpha$ for some $\alpha$ that is maximal. Since it is safe to add $0$, then $S := S \cup \{0\} = \{0\}$. Now, since it is safe to add $1$ to $S$, then $S := S \cup \{1\}$. At this point, $S = \{0,1\}$. Since it is also safe to add $2$, then $S:= S \cup \{2\}$. At this point $S = \{0,1,2\}$. Now we get that $3$ is not safe to add, since $\{0,1,2,3\}$ is not a subset of any basis, therefore we do not add it to $S$. Finally we check that $4$ is safe to add, and $S:= S \cup \{4\}$. This yields $\{0,1,2,4\}$ as the optimal job assignment with respect to the priorities.
+    
+    \item Let $V$ be a vector space and $E$ be a finite subset of $V$. Let $I$ be the set of linearly independent subsets of $I$. Show that $(E,I)$ is a matroid.
+    
+    \begin{proof}
+    Let $A \in I$ and $A' \subseteq A$. Notice that since $A$ is linearly independent, then $A'$ is also linearly independent.
+    
+    Assume now that $A, A' \in I$ and $\vert A \vert < \vert A' \vert$. Assume by contradiction that $A \cup \{v\}$ is not linearly independent for any $v \in A' \setminus A$. Therefore $A$ is a generator for $\langle A' \rangle$. Since $A'$ is linearly independent, then it is a basis for the vector space $\langle A' \rangle$. Notice that since $A$ is also linearly independent and generates $\langle A' \rangle$, then $A$ is also a basis for $\langle A' \rangle$. It follows that $\vert A \vert = \vert A' \vert$ since all basis for the same vector space have the same cardinality. This is a contradiction, therefore $I$ has the matroid property.
+    
+    Therefore $(E,I)$ is a matroid.
+    \end{proof}
+    
+
+    
+    
+    \end{enumerate}
+    
+
+    
+
+
+\end{document}
